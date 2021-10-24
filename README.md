@@ -2,12 +2,18 @@
 Generate a GraphQL API from your SQL database in minutes.
 
 ## Features
-
-Generates GraphQL Types from database Schema
-
-Generates Queries and Insert, Update and Delete Mutations
-
-Advanced Set querying logic
+-   [x] Lightning fast and light weight
+-   [x] Generates GraphQL Types from database Schema
+-   [x] Generates Queries and Insert, Update and Delete Mutations
+-   [x] Advanced Set querying logic
+-   [x] Where conditions
+-   [x] Order by
+-   [x] One-To-Many joins
+-   [x] Many-To-Many joins
+-   [x] Paging
+-   [x] Connections
+-   [ ] Support for more databases
+-   [ ] Documentation
 
 
 ## Container Registration

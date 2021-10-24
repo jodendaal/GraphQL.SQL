@@ -1,4 +1,4 @@
-# GraphQL.SQL
+# GraphQL.SQL for .NET
 Generate a GraphQL API from your SQL database in minutes.
 
 ## Features

@@ -18,7 +18,7 @@ Generate a GraphQL API from your SQL database in minutes.
 
 ## Container Registration
 
-Use or extension method to quickly add the required services to [IServiceCollection](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection):
+Use extension method to quickly add the required services to [IServiceCollection](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection):
 
 
 
@@ -29,7 +29,7 @@ Use or extension method to quickly add the required services to [IServiceCollect
 ```
 ## App Registration
 
-If you would like to use our middleware this can be added in Configure
+If you would like to use the included middleware this can be added in Configure
 
 
 <!-- snippet: RegisterInContainer -->

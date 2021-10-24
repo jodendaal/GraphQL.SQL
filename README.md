@@ -20,5 +20,5 @@ If you would like to use our middleware this can be added in Configure
 <!-- snippet: RegisterInContainer -->
 <a id='snippet-registerincontainer'></a>
 ```cs
-  app.UseGraphQLApiMiddleWare();
+  app.UseGraphQLLSqlApiMiddleWare();
 ```

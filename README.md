@@ -3,7 +3,7 @@ Generate a GraphQL API from your SQL database in minutes.
 
 ## Container Registration
 
-Enabling is done via registering in a container.
+Use or extension method to quickly register the services
 
 The container registration can be done via adding to a [IServiceCollection](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection):
 

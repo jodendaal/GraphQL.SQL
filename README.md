@@ -1,5 +1,5 @@
 # GraphQL.SQL for .NET
-
+[![.NET](https://github.com/jodendaal/GraphQL.SQL/actions/workflows/dotnet-desktop.yml/badge.svg?branch=main)](https://github.com/jodendaal/GraphQL.SQL/actions/workflows/dotnet-desktop.yml)
 # Work in Progress - Coming Soon
 
 Generate a GraphQL API from your SQL database in minutes.

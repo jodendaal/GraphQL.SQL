@@ -4,6 +4,7 @@ using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data.Common;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -13,13 +14,12 @@ namespace GraphQL.SQL.Tests
     public class BaseDatabaseTest
     {
         private static SqlInstance sqlInstance;
-        public SqlDatabase Database { get; set; }
         static BaseDatabaseTest()
         {
             sqlInstance = new(
-             name: "GraphQLSQLTest",
-             buildTemplate: BaseDatabaseTest.CreateSchema);
-
+             name: "GraphQLSQLTestNew",
+             buildTemplate: CreateSchema
+             );
         }
 
         public static async Task CreateSchema(DbConnection connection)
@@ -30,18 +30,24 @@ namespace GraphQL.SQL.Tests
                 Server server = new Server(new ServerConnection(con));
                 server.ConnectionContext.ExecuteNonQuery(script);
             }
+
+            await Task.Delay(0);
         }
 
-        [TestInitialize]
-        public async Task InitialiseDatabase()
+    
+        public async Task<SqlDatabase> GetDatabase(string id)
         {
-            Database = await sqlInstance.Build();
+            return await sqlInstance.Build(memberName:id);
         }
 
-        [TestCleanup]
-        public void CleanUp()
+        ~BaseDatabaseTest()
         {
-            sqlInstance.Cleanup();
+            try
+            {
+                Debug.WriteLine("CLeaning up databases");
+                sqlInstance.Cleanup();
+            }
+            catch { }
         }
     }
 }

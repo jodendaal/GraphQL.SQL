@@ -16,7 +16,7 @@ namespace GraphQL.SQL.Tests
         [TestMethod]
         public async Task TestConnection1()
         {
-           var db = await GetDatabase("1");
+           var db = await GetDatabase();
            using(var cmd = new SqlCommand("SELECT COUNT(*) FROM DBO.ORDERS", db.Connection))
             {
                 var result =(int)cmd.ExecuteScalar();
@@ -27,7 +27,7 @@ namespace GraphQL.SQL.Tests
         [TestMethod]
         public async Task TestConnection2()
         {
-            var db = await GetDatabase("2");
+            var db = await GetDatabase();
             using (var cmd = new SqlCommand("SELECT COUNT(*) FROM DBO.ORDERS", db.Connection))
             {
                 var result = (int)cmd.ExecuteScalar();
@@ -38,7 +38,7 @@ namespace GraphQL.SQL.Tests
         [TestMethod]
         public async Task TestConnection3()
         {
-            var db = await GetDatabase("3");
+            var db = await GetDatabase();
             using (var cmd = new SqlCommand("SELECT COUNT(*) FROM DBO.ORDERS", db.Connection))
             {
                 var result = (int)cmd.ExecuteScalar();

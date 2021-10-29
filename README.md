@@ -1,4 +1,7 @@
 # GraphQL.SQL for .NET
+
+#Work in Progress - Commming Soon
+
 Generate a GraphQL API from your SQL database in minutes.
 
 ## Features

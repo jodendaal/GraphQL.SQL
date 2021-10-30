@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphQL.SQL", "GraphQL.SQL\GraphQL.SQL.csproj", "{FAE0C75D-06AB-4183-BC83-A94AC4B5BFB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL.SQL.Tests", "GraphQL.SQL.Tests\GraphQL.SQL.Tests.csproj", "{F7B59442-2713-4F8C-9BF9-B383CE9A4814}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphQL.SQL.Tests", "GraphQL.SQL.Tests\GraphQL.SQL.Tests.csproj", "{F7B59442-2713-4F8C-9BF9-B383CE9A4814}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AF259B4F-128F-4C3B-96D2-B24A99FBD753}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

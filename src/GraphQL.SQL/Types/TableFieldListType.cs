@@ -1,8 +1,6 @@
 ﻿using GraphQL.Resolvers;
 using GraphQL.Types;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading;
@@ -23,6 +21,7 @@ namespace GraphQL.SQL.Types
                 var data = await database.Query(CancellationToken.None, metaData, context);
                 return data;
             }) : fieldResolver;
+            Arguments = new TableQueryArgsType(metaData);
         }
     }
 }

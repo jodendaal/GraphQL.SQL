@@ -13,7 +13,7 @@ namespace GraphQL.SQL.Tests.Convertors
     public class MetaDataToGraphType : BaseDatabaseTest
     {
         [TestMethod]
-        public async Task TableToGraphQLObject()
+        public void TableToGraphQLObject()
         {
             var result = new List<GraphQLTableMetaData>();
             var usersTable = new GraphQLTableMetaData()

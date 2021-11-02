@@ -1,4 +1,5 @@
-﻿using GraphQL.NewtonsoftJson;
+﻿using GraphQL.DataLoader;
+using GraphQL.NewtonsoftJson;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using System;
@@ -35,6 +36,34 @@ namespace GraphQL.SQL.Tests.GraphQL
             Assert.AreEqual(1,orders.Children().Count());
             Assert.IsNotNull(orders.First()["orderID"], "column returned null value");
             Assert.AreEqual("10248",orders.First()["orderID"].ToString() , "column returned incorrect value");
+        }
+
+        [TestMethod]
+        public async Task Select_ById_Relationship()
+        {
+            var query = "{orders(orderID:10258)  {  orderID fK_Orders_Customers { companyName } } }";
+            var container = await GetContainer();
+            var schema = new SqlSchema(container);
+
+            var documentCache = container.GetService(typeof(DataLoaderDocumentListener));
+
+            var json = await schema.ExecuteAsync(_ =>
+            {
+                _.Query = query;
+                _.RequestServices = container;
+                _.Listeners.Add(documentCache as DataLoaderDocumentListener);
+            });
+            Debug.WriteLine(json);
+            var jObject = JObject.Parse(json);
+            var orders = jObject["data"]["orders"];
+
+           
+
+            Assert.IsNotNull(orders);
+            Assert.AreEqual(1, orders.Children().Count());
+            Assert.IsNotNull(orders.First()["orderID"], "column returned null value");
+            Assert.AreEqual("10258", orders.First()["orderID"].ToString(), "column returned incorrect value");
+            Assert.AreEqual("Ernst Handel", orders.First()["fK_Orders_Customers"].First()["companyName"].ToString(), "column returned incorrect value");
         }
 
         [TestMethod]

@@ -1,5 +1,7 @@
-﻿using GraphQL.SQL.MetaData;
+﻿using GraphQL.SQL.Convertors;
+using GraphQL.SQL.MetaData;
 using GraphQL.Types;
+using System.Linq;
 
 namespace GraphQL.SQL.Types
 {
@@ -9,7 +11,8 @@ namespace GraphQL.SQL.Types
         {
             if (!string.IsNullOrWhiteSpace(table.IdentityColumn))
             {
-                this.Add(new QueryArgument(typeof(IntGraphType)) { Name = table.IdentityColumn, Description = "id of record" });
+                var field = table.Fields.FirstOrDefault(i => i.Name == table.IdentityColumn);
+                this.Add(new QueryArgument(field.SqlType.ToGraphQLType()) { Name = table.IdentityColumn, Description = "id of record" });
             }
 
             if (table.PagingEnabled)

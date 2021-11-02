@@ -11,6 +11,9 @@ namespace GraphQL.SQL.Types
             ResolvedType = new ListGraphType(base.ResolvedType);
             Resolver = new TableFieldTypeResolver(childMetaData);
             Metadata.Add("relationshipName", relationShip.FieldName);
+            Metadata.Add("relationshipNameParentKey", relationShip.ParentKeyField);
+            Metadata.Add("relationshipNameChildKey", relationShip.ChildKeyField);
+           // Arguments = new TableQueryArgsType(childMetaData);
         }
     }
 }

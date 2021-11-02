@@ -33,7 +33,17 @@ namespace GraphQL.SQL
             var sqlCommand = GenerateSqlCommand(context, metaData, ids);
 
             var dt = await Execute(sqlCommand);
-            var t = dt.Rows.Cast<DataRow>().ToLookup(i => i[metaData.IdentityColumn].ToString(), o => o);
+
+
+            var lookupKey = metaData.IdentityColumn;
+            
+            //Relationships
+            if (context.FieldDefinition.Metadata.ContainsKey("relationshipNameParentKey"))
+            {
+                lookupKey = metaData.Fields.FirstOrDefault(i => i.Name == context.FieldDefinition.Metadata["relationshipNameParentKey"].ToString()).Name;
+            }
+
+            var t = dt.Rows.Cast<DataRow>().ToLookup(i => i[lookupKey].ToString(), o => o);
 
             var result = new Dictionary<string, IGrouping<string, DataRow>>();
 
@@ -209,18 +219,27 @@ namespace GraphQL.SQL
 
             if (ids != null && ids.Count() > 0)
             {
+                var parentKey = context.FieldDefinition.Metadata["relationshipNameParentKey"].ToString();
+
                 sqlBuilder.ConditionSet(setNo + 1, SetOperator.And, (a) =>
                 {
                     var tableField = tableMetaData.Fields.FirstOrDefault(i => i.Name == tableMetaData.IdentityColumn);
+                    
+                    //Relationships
+                    if (context.FieldDefinition.Metadata.ContainsKey("relationshipNameParentKey"))
+                    {
+                        tableField = tableMetaData.Fields.FirstOrDefault(i => i.Name == context.FieldDefinition.Metadata["relationshipNameParentKey"].ToString());
+                    }
+
                     if (tableField != null)
                     {
                         if (tableField.SqlType.Contains("int"))
                         {
-                            a.AndCondition(tableMetaData.IdentityColumn, ColumnOperator.IN, $"({string.Join(",", ids)})");
+                            a.AndCondition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", ColumnOperator.IN, $"({string.Join(",", ids)})");
                         }
                         else
                         {
-                            a.AndCondition(tableMetaData.IdentityColumn, ColumnOperator.IN, $"({string.Join(",", ids.Select(i=> $"'{i}'"))})");
+                            a.AndCondition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", ColumnOperator.IN, $"({string.Join(",", ids.Select(i=> $"'{i}'"))})");
                         }
                     }
                 });

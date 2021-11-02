@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
 
 namespace GraphQL.SQL.MetaData
 {
@@ -25,9 +27,18 @@ namespace GraphQL.SQL.MetaData
                 });
 
                 _graphQlMetadata.RelationShips = metaData.RelationShips;
+
+                SaveJson(_graphQlMetadata);
             }
 
+           
+
             return _graphQlMetadata;
+        }
+
+        private void SaveJson(GraphQLSqlMetaData graphQlMetadata)
+        {
+            File.WriteAllText("database-schema.json", JsonConvert.SerializeObject(graphQlMetadata));
         }
     }
 }

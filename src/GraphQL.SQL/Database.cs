@@ -159,6 +159,30 @@ namespace GraphQL.SQL
             }
         }
 
+        private string ToCSV(object value,string valueType)
+        {
+            if (valueType.Contains("int"))
+            {
+                if (value is IEnumerable<int>)
+                {
+                    return $"({string.Join(",", (value as IEnumerable<int>))})";
+                }
+
+                var valuesInt = value as object[];
+                return $"({string.Join(",", valuesInt)})";
+            }
+            else 
+            {
+                if(value is IEnumerable<string>)
+                {
+                    return $"({string.Join(",", (value as IEnumerable<string>).Select(i => $"'{i}'"))})";
+                }
+
+                var valuesTring = value as string[];
+                return $"({string.Join(",", valuesTring.Select(i => $"'{i}'"))})";
+            }
+        }
+
         private List<SelectCondition> GetFilterSetConditions(Dictionary<string, object> values, Table tableMetaData, SelectQueryBuilder sqlBuilder)
         {
             var result = new List<SelectCondition>();
@@ -176,7 +200,19 @@ namespace GraphQL.SQL
                 var tableField = tableMetaData.Fields.FirstOrDefault(i => i.NameAs.ToLowerInvariant() == fieldName.ToLowerInvariant());
                 if (tableField != null)
                 {
-                    result.Add(new SelectCondition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", GetFieldOperator(v.Key), sqlBuilder.AddParam(v.Value, tableField.Name)));
+                    var @operator = GetFieldOperator(v.Key);
+                    switch (@operator)
+                    {
+                        case ColumnOperator.IN:
+                        case ColumnOperator.NOT_IN:
+                            result.Add(new SelectCondition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", GetFieldOperator(v.Key), ToCSV(v.Value, tableField.SqlType)));
+                            break;
+                        default:
+                            result.Add(new SelectCondition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", GetFieldOperator(v.Key), sqlBuilder.AddParam(v.Value, tableField.Name)));
+                            break;
+                    }
+
+                    
                 }
             }
 
@@ -210,7 +246,17 @@ namespace GraphQL.SQL
                         var tableField = tableMetaData.Fields.FirstOrDefault(i => i.NameAs.ToLowerInvariant() == field.Key.ToLowerInvariant());
                         if (tableField != null)
                         {
-                            sqlBuilder.Condition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", GetFieldOperator(field.Key), sqlBuilder.AddParam(field.Value.Value, tableField.Name));
+                            var @operator = GetFieldOperator(field.Key);
+                            switch (@operator)
+                            {
+                                case ColumnOperator.IN:
+                                case ColumnOperator.NOT_IN:
+                                    sqlBuilder.Condition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", @operator, ToCSV(field.Value.Value, tableField.SqlType));
+                                    break;
+                                default:
+                                    sqlBuilder.Condition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", @operator, sqlBuilder.AddParam(field.Value.Value, tableField.Name));
+                                    break;
+                            }
                         }
                     }
                 }
@@ -233,14 +279,7 @@ namespace GraphQL.SQL
 
                     if (tableField != null)
                     {
-                        if (tableField.SqlType.Contains("int"))
-                        {
-                            a.AndCondition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", ColumnOperator.IN, $"({string.Join(",", ids)})");
-                        }
-                        else
-                        {
-                            a.AndCondition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", ColumnOperator.IN, $"({string.Join(",", ids.Select(i=> $"'{i}'"))})");
-                        }
+                        a.AndCondition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", ColumnOperator.IN, ToCSV(ids, tableField.SqlType));
                     }
                 });
             }
@@ -299,6 +338,10 @@ namespace GraphQL.SQL
                         return ColumnOperator.LessThanOrEqualTo;
                     case "ne":
                         return ColumnOperator.NotEquals;
+                    case "in":
+                        return ColumnOperator.IN;
+                    case "ni":
+                        return ColumnOperator.NOT_IN;
                 }
             }
 

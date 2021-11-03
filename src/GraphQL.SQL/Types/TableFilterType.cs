@@ -182,11 +182,17 @@ namespace GraphQL.SQL.Types
                               ColumnOperator.LessThanOrEqualTo
                         });
 
-                        // AddField(new FieldType()
-                        // {
+                        AddFilter(typeof(ListGraphType<IntGraphType>), field.NameAs, new List<string>()
+                        {
+                              ColumnOperator.IN,
+                              ColumnOperator.NOT_IN
+                        });
+
+                        //AddField(new FieldType()
+                        //{
                         //    Name = $"{field.GeneratedName}_in",
                         //    Type = typeof(StringGraphType)
-                        // });
+                        //});
 
                         // AddField(new FieldType()
                         // {
@@ -254,6 +260,24 @@ namespace GraphQL.SQL.Types
                     {
                         Name = $"{fieldName}_lte",
                         Type = graphType
+                    });
+                }
+                else if (op == ColumnOperator.IN)
+                {
+                    AddField(new FieldType()
+                    {
+                        Name = $"{fieldName}_in",
+                        Type =   graphType,
+                        
+                    });
+                }
+                else if (op == ColumnOperator.NOT_IN)
+                {
+                    AddField(new FieldType()
+                    {
+                        Name = $"{fieldName}_ni",
+                        Type = graphType,
+
                     });
                 }
             }

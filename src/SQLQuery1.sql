@@ -1,0 +1,12 @@
+﻿Declare @p1 nvarchar(max) = 'ALFKI'
+Declare @p2 nvarchar(max) = 'ANATR'
+select * from customers
+where CustomerID in (@p1,@p2)
+
+
+SELECT
+[Customers].[CustomerID] AS [CustomerID],
+[Customers].[CompanyName] AS [CompanyName]
+FROM [dbo].[Customers] [Customers]
+WHERE CustomerID IN ('VINET','TOMSP','HANAR','VICTE','SUPRD','CHOPS','RICSU','WELLI','HILAA','ERNSH','CENTC','OTTIK','QUEDE','RATTC','FOLKO','BLONP','WARTH','FRANK','GROSR','WHITC','SPLIR','QUICK','MAGAA','TORTU','MORGK','BERGS','LEHMS','ROMEY','LILAS','RICAR','REGGC','BSBEV','COMMI','TRADH','HUNGO','WANDK','GODOS','OLDWO','LONEP','ANATR','THEBI','DUMON','ISLAT','PERIC','KOENE','SAVEA','BOLID','FURIB','BONAP','MEREP','PRINI','SIMOB','FAMIA','LAMAI','PICCO','AROUT','SEVES','DRACD','EASTC','ANTON','GALED','VAFFE','QUEEN','WOLZA','HUNGC','SANTG','BOTTM','LINOD','FOLIG','OCEAN','FRANS','GOURL','CONSH','RANCH','LAZYK','LAUGB','BLAUS','NORTS','CACTU','GREAL','MAISD','TRAIH','LETSS','WILMK','THECR','ALFKI','FRANR','SPECD','LACOR')
+

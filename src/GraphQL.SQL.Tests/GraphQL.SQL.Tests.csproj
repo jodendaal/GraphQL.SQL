@@ -13,6 +13,8 @@
 
   <ItemGroup>
     <PackageReference Include="GraphQL" Version="4.6.1" />
+    <PackageReference Include="GraphQL.DataLoader" Version="4.6.1" />
+    <PackageReference Include="GraphQL.NewtonsoftJson" Version="4.6.1" />
     <PackageReference Include="LocalDb" Version="10.7.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.0-preview3.21293.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />

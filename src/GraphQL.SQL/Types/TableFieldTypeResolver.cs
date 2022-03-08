@@ -37,7 +37,7 @@ namespace GraphQL.SQL.Types
                     else
                     {
                         row = context.Source as DataRow;//for relationshipsmay seperate resolver
-                    }
+                    } 
 
                     if (!row.Table.Columns.Contains(_tableMetaData.IdentityColumn))
                     {

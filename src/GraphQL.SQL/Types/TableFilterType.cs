@@ -35,6 +35,13 @@ namespace GraphQL.SQL.Types
                               ColumnOperator.LessThan,
                               ColumnOperator.LessThanOrEqualTo
                         });
+
+                        AddFilter(typeof(ListGraphType<DateGraphType>), field.NameAs, new List<string>()
+                        {
+                              ColumnOperator.IN,
+                              ColumnOperator.NOT_IN
+                        });
+
                         break;
                     case "time":
                     case "datetime":
@@ -49,6 +56,13 @@ namespace GraphQL.SQL.Types
                               ColumnOperator.LessThan,
                               ColumnOperator.LessThanOrEqualTo
                         });
+
+                        AddFilter(typeof(ListGraphType<DateTimeGraphType>), field.NameAs, new List<string>()
+                        {
+                              ColumnOperator.IN,
+                              ColumnOperator.NOT_IN
+                        });
+
                         break;
                     case "datetimeoffset":
                         AddFilter(typeof(DateTimeOffsetGraphType), field.NameAs, new List<string>()
@@ -60,6 +74,13 @@ namespace GraphQL.SQL.Types
                               ColumnOperator.LessThan,
                               ColumnOperator.LessThanOrEqualTo
                         });
+
+                        AddFilter(typeof(ListGraphType<DateTimeOffsetGraphType>), field.NameAs, new List<string>()
+                        {
+                              ColumnOperator.IN,
+                              ColumnOperator.NOT_IN
+                        });
+
                         break;
                     case "bit":
                         AddField(new FieldType()
@@ -78,7 +99,13 @@ namespace GraphQL.SQL.Types
                         AddField(new FieldType()
                         {
                             Name = $"{field.NameAs}_ne",
-                            Type = typeof(StringGraphType)
+                            Type = typeof(GuidGraphType)
+                        });
+
+                        AddFilter(typeof(ListGraphType<GuidGraphType>), field.NameAs, new List<string>()
+                        {
+                              ColumnOperator.IN,
+                              ColumnOperator.NOT_IN
                         });
 
                         break;
@@ -93,6 +120,12 @@ namespace GraphQL.SQL.Types
                         {
                               ColumnOperator.Equals,
                               ColumnOperator.NotEquals
+                        });
+
+                        AddFilter(typeof(ListGraphType<StringGraphType>), field.NameAs, new List<string>()
+                        {
+                              ColumnOperator.IN,
+                              ColumnOperator.NOT_IN
                         });
 
                         // AddField(new FieldType()
@@ -130,6 +163,14 @@ namespace GraphQL.SQL.Types
                               ColumnOperator.LessThan,
                               ColumnOperator.LessThanOrEqualTo
                         });
+
+
+                        AddFilter(typeof(ListGraphType<FloatGraphType>), field.NameAs, new List<string>()
+                        {
+                              ColumnOperator.IN,
+                              ColumnOperator.NOT_IN
+                        });
+
                         break;
                     case "decimal":
                     case "numeric":
@@ -144,6 +185,12 @@ namespace GraphQL.SQL.Types
                               ColumnOperator.GreaterThanOrEqualTo,
                               ColumnOperator.LessThan,
                               ColumnOperator.LessThanOrEqualTo
+                        });
+
+                        AddFilter(typeof(ListGraphType<DecimalGraphType>), field.NameAs, new List<string>()
+                        {
+                              ColumnOperator.IN,
+                              ColumnOperator.NOT_IN
                         });
 
                         // AddField(new FieldType()
@@ -168,6 +215,13 @@ namespace GraphQL.SQL.Types
                               ColumnOperator.LessThan,
                               ColumnOperator.LessThanOrEqualTo
                         });
+
+                        AddFilter(typeof(ListGraphType<BigIntGraphType>), field.NameAs, new List<string>()
+                        {
+                              ColumnOperator.IN,
+                              ColumnOperator.NOT_IN
+                        });
+
                         break;
                     case "int":
                     case "tinyint":
@@ -208,6 +262,22 @@ namespace GraphQL.SQL.Types
                         break;
                 }
             });
+
+            //table.Relationships.ForEach(relationship =>
+            //{
+            //    //var filterType = new TableFilterType(new GraphQLTableMetaData(relationship.GetChildMetaData()));
+            //    //AddField(new FieldType()
+            //    //{
+            //    //    Name = $"{relationship.FieldName}_exists",
+            //    //    Type = filterType.GetType()
+            //    //});
+
+            //    //AddField(new FieldType()
+            //    //{
+            //    //    Name = $"{relationship.FieldName}_not_exists",
+            //    //    Type = filterType.GetType()
+            //    //});
+            //});
         }
 
         private void AddFilter(Type graphType, string fieldName, List<string> operators)

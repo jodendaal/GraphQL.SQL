@@ -17,9 +17,9 @@ namespace GraphQL.SQL
             var gqlMetaData = metaDataProvider.GetMetaData();
             var types = gqlMetaData.ToGraphQLTypes();
 
-            foreach (var tableType in types)
+            foreach (var table in gqlMetaData.Tables)
             {
-                AddField(new TableFieldListType(tableType.Value));
+                AddField(new TableFieldListType(types[table.NameAs]));
             }
         }
     }

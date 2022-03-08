@@ -1,7 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Description>Generate a GraphQL API from your SQL database in minutes.</Description>
+    <Authors>justim.odendaal</Authors>
+    <Version>0.0.1</Version>
+    <PackageProjectUrl>https://github.com/jodendaal/GraphQL.SQL</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jodendaal/GraphQL.SQL</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

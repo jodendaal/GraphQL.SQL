@@ -28,5 +28,5 @@ Use extension method to quickly add the required services to [IServiceCollection
 <!-- snippet: RegisterInContainer -->
 <a id='snippet-registerincontainer'></a>
 ```cs
- services.AddGraphQLSQL(_connectionString);
+ services.UseGraphQL(_connectionString);
 ```

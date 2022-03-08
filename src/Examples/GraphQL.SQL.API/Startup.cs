@@ -1,4 +1,5 @@
 using GraphQL.DataLoader;
+using GraphQL.SQL.Extensions;
 using GraphQL.SQL.MetaData;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,27 +30,33 @@ namespace GraphQL.SQL.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ISqlSchemaToMetaData, SqlSchemaToMetaData>((a) => {
-               return new SqlSchemaToMetaData(_connectionString);
-            });
 
-            services.AddSingleton<IDatabase, Database>((a) => {
-                return new Database(_connectionString);
-            });
+            services.UseGraphQL(_connectionString);
 
-            services.AddSingleton<IMetaDataProvider>((a)=> {
-                if (File.Exists("database-schema.json"))
-                {
-                    return new JsonMetaDataProvider("database-schema.json");
-                }
+            //Manual Config Example
+            //services.AddSingleton<ISqlSchemaToMetaData, SqlSchemaToMetaData>((a) => {
+            //   return new SqlSchemaToMetaData(_connectionString);
+            //});
 
-                return new AutoGenerateMetaDataProvider(a.GetRequiredService<ISqlSchemaToMetaData>());
-            });
-            services.AddSingleton<SqlQuery>();
-            services.AddSingleton<SqlSchema>();
+            //services.AddSingleton<IDatabase, Database>((a) => {
+            //    return new Database(_connectionString);
+            //});
 
-            services.AddSingleton<IDataLoaderContextAccessor, DataLoaderContextAccessor>();
-            services.AddSingleton<DataLoaderDocumentListener>();
+            //services.AddSingleton<IMetaDataProvider>((a)=> {
+            //    if (File.Exists("database-schema.json"))
+            //    {
+            //        return new JsonMetaDataProvider("database-schema.json");
+            //    }
+
+            //    return new AutoGenerateMetaDataProvider(a.GetRequiredService<ISqlSchemaToMetaData>());
+            //});
+            //services.AddSingleton<SqlQuery>();
+            //services.AddSingleton<SqlSchema>();
+
+            //services.AddSingleton<IDataLoaderContextAccessor, DataLoaderContextAccessor>();
+            //services.AddSingleton<DataLoaderDocumentListener>();
+
+
             //services.AddGraphQLSQL(_connectionString);
             services.AddRazorPages();
         }

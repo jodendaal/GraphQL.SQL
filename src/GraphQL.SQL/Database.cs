@@ -159,27 +159,45 @@ namespace GraphQL.SQL
             }
         }
 
-        private string ToCSV(object value,string valueType)
+        private string ToCSV(object value,string valueType,SelectQueryBuilder builder)
         {
-            if (valueType.Contains("int"))
+            switch (valueType)
             {
-                if (value is IEnumerable<int>)
-                {
-                    return $"({string.Join(",", (value as IEnumerable<int>))})";
-                }
+                case "int":
+                case "decimal":
+                case "numeric":
+                case "money":
+                case "smallmoney":
+                case "bigint":
+                case "tinyint":
+                case "smallint":
+                    if (value is IEnumerable<int>)
+                    {
+                        return $"({string.Join(",", (value as IEnumerable<int>))})";
+                    }
 
-                var valuesInt = value as object[];
-                return $"({string.Join(",", valuesInt)})";
-            }
-            else 
-            {
-                if(value is IEnumerable<string>)
-                {
-                    return $"({string.Join(",", (value as IEnumerable<string>).Select(i => $"'{i}'"))})";
-                }
+                    var valuesInt = value as object[];
+                    return $"({string.Join(",", valuesInt)})";
+                case "varchar":
+                case "nchar":
+                case "nvarchar":
+                case "text":
+                case "ntext":
+                case "char":
+                case "uniqueidentifier":
 
-                var valuesTring = value as string[];
-                return $"({string.Join(",", valuesTring.Select(i => $"'{i}'"))})";
+                    if (value is IEnumerable<string>)
+                    {
+                        return $"({string.Join(",", (value as IEnumerable<string>).Select(i => $"'{i}'"))})";
+                    }
+
+                    var valuesTring = value as object[];
+                    return $"({string.Join(",", valuesTring.Select(i => $"'{i}'"))})";
+                    //return $"({ToCSV(valuesTring)}";
+                default:
+
+                    var values = value as object[];
+                    return $"({string.Join(",", values.Select(i=> builder.AddParam(i)))})";
             }
         }
 
@@ -205,7 +223,7 @@ namespace GraphQL.SQL
                     {
                         case ColumnOperator.IN:
                         case ColumnOperator.NOT_IN:
-                            result.Add(new SelectCondition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", GetFieldOperator(v.Key), ToCSV(v.Value, tableField.SqlType)));
+                            result.Add(new SelectCondition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", GetFieldOperator(v.Key), ToCSV(v.Value, tableField.SqlType, sqlBuilder)));
                             break;
                         default:
                             result.Add(new SelectCondition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", GetFieldOperator(v.Key), sqlBuilder.AddParam(v.Value, tableField.Name)));
@@ -251,7 +269,7 @@ namespace GraphQL.SQL
                             {
                                 case ColumnOperator.IN:
                                 case ColumnOperator.NOT_IN:
-                                    sqlBuilder.Condition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", @operator, ToCSV(field.Value.Value, tableField.SqlType));
+                                    sqlBuilder.Condition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", @operator, ToCSV(field.Value.Value, tableField.SqlType, sqlBuilder));
                                     break;
                                 default:
                                     sqlBuilder.Condition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", @operator, sqlBuilder.AddParam(field.Value.Value, tableField.Name));
@@ -279,7 +297,7 @@ namespace GraphQL.SQL
 
                     if (tableField != null)
                     {
-                        a.AndCondition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", ColumnOperator.IN, ToCSV(ids, tableField.SqlType));
+                        a.AndCondition($"{sqlBuilder.TableAlias}.[{tableField.Name}]", ColumnOperator.IN, ToCSV(ids, tableField.SqlType, sqlBuilder));
                     }
                 });
             }

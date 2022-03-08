@@ -13,7 +13,7 @@ namespace GraphQL.SQL.Types
             Metadata.Add("relationshipName", relationShip.FieldName);
             Metadata.Add("relationshipNameParentKey", relationShip.ParentKeyField);
             Metadata.Add("relationshipNameChildKey", relationShip.ChildKeyField);
-           // Arguments = new TableQueryArgsType(childMetaData);
+            // Arguments = new TableQueryArgsType(childMetaData);
         }
     }
 }
